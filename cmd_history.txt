@@ -1,8 +1,12 @@
-# git
-git clone https://github.com/widefoot1974/Kube.git
-git config --global user.email "widefoot1974@naver.com"
-git config --global user.name "widefoot1974"
-git config --global credential.helper store
+## 클러스트 생성
+minikube start --driver=podman -n 3 --insecure-registry="10.10.9.11:8080"
 
-widefoot1974
-${GITHUB_TOKEN}
+## helm
+helm show chart bitnami/nginx
+helm inspect values bitnami/nginx
+
+# helm
+helm install webserver --set service.type=NodePort bitnami/nginx
+
+# nginx_values.yaml의 값을 변경한 후 실행
+helm install webserver -f nginx_values.NodePort.yaml bitnami/nginx
