@@ -10,3 +10,11 @@ helm install webserver --set service.type=NodePort bitnami/nginx
 
 # nginx_values.yaml의 값을 변경한 후 실행
 helm install webserver -f nginx_values.NodePort.yaml bitnami/nginx
+
+
+# helm upgrade
+helm upgrade --set image.repository=httpd --set image.tag=2.2.34-alpine webserver mynginx
+
+# helm rollback
+helm rollback webserver 1
+
