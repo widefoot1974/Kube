@@ -1,0 +1,2 @@
+# git
+git clone https://github.com/widefoot1974/Kube.git
