@@ -5,3 +5,8 @@
 +  git config --global user.email "widefoot1974@naver.com"
 +  git config --global user.name "widefoot1974"
 +  git config --global credential.helper store
+
+## helm
++ helm install webserver ./mynginx
++ helm upgrade --set image.repository=httpd --set image.tag=2.2.34-alpine webserver mynginx
++ helm rollback webserver 1
