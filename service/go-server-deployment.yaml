@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-server-deployment
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: go-server
+  template:
+    metadata:
+      labels:
+        app: go-server
+    spec:
+      containers:
+      - name: go-server
+        image: golang:1.20
+        ports:
+          - containerPort: 8090
+        command: ["/bin/sh", "-c"]
+        args:
+          # 1) ConfigMap에서 main.go를 /app/src 에서 /app/build로 복사
+          # 2) /app/build에서 go build
+          # 3) 빌드된 바이너리 실행
+          - |
+            cp /app/src/main.go /app/build/ && \
+            cd /app/build && \
+            go mod init tmpmod || true && \
+            go build -o go-server main.go && \
+            ./go-server
+        volumeMounts:
+          # (a) ConfigMap 볼륨: 기본적으로 ReadOnly
+          - name: go-server-config-vol
+            mountPath: /app/src  # 읽기 전용
+            readOnly: true
+          # (b) EmptyDir 볼륨: 쓰기 가능
+          - name: go-server-build-vol
+            mountPath: /app/build
+      volumes:
+        - name: go-server-config-vol
+          configMap:
+            name: go-server-config
+            items:
+              - key: main.go
+                path: main.go
+        - name: go-server-build-vol
+          emptyDir: {}
