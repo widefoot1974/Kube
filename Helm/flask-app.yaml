@@ -1,0 +1,41 @@
+#############################################
+# Deployment: 커스텀 Flask 이미지 실행
+#############################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myflask 
+  template:
+    metadata:
+      labels:
+        app: myflask 
+    spec:
+      containers:
+      - name: myflask
+        image: 10.10.9.11:8080/education/myflask:1.0.0  # 실제 빌드/푸시한 이미지 경로
+        ports:
+        - containerPort: 5000
+
+---
+#############################################
+# Service: LoadBalancer, 외부에 80 -> 5000 노출
+#############################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: myflask 
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+      name: http
+
