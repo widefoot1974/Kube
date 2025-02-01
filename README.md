@@ -25,3 +25,6 @@
 + helm upgrade --set image.repository=httpd --set image.tag=2.2.34-alpine webserver mynginx
 + helm rollback webserver 1
 
+## etc command 
++ kubectl run ubuntu-pod --image=ubuntu --restart=Never --command -- /bin/sh -c "while true; do sleep 30; done"
++ kubectl run ubuntu-pod --image=ubuntu --restart=Never --command -- /bin/sh -c "while true; do sleep 30; done"
